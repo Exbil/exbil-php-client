@@ -1,11 +1,11 @@
-# Exbil Cloud API Client
+# Exbil Reselling API Client
 
 PHP API Client for the Exbil Reselling Portal.
 
 ## Installation
 
 ```bash
-composer require exbil/cloud-api-client
+composer require exbil/reselling-api-client
 ```
 
 ## Quick Start

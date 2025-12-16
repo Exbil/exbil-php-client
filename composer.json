@@ -1,6 +1,6 @@
 {
-    "name": "exbil/cloud-api-client",
-    "description": "PHP API Client for Exbil Cloud Portal",
+    "name": "exbil/reselling-api-client",
+    "description": "PHP API Client for Exbil Reselling Portal",
     "type": "library",
     "minimum-stability": "stable",
     "license": "BSD-2-Clause",
