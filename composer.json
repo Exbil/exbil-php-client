@@ -1,0 +1,33 @@
+{
+    "name": "exbil/cloud-api-client",
+    "description": "PHP API Client for Exbil Cloud Portal",
+    "type": "library",
+    "minimum-stability": "stable",
+    "license": "BSD-2-Clause",
+    "autoload": {
+        "psr-4": {
+            "Exbil\\CloudApi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Efe Bağrı",
+            "email": "composer@exbil.net",
+            "homepage": "https://www.exbil.net"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "guzzlehttp/guzzle": "^7.9",
+        "ext-json": "*"
+    },
+    "keywords": [
+        "exbil",
+        "cloud",
+        "api",
+        "client",
+        "billing",
+        "vat",
+        "geoip"
+    ]
+}

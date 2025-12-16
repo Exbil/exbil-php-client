@@ -1,0 +1,289 @@
+<?php
+
+namespace Exbil\CloudApi\Handlers;
+
+use Exbil\CloudApi\Client;
+use Exbil\CloudApi\Exceptions\ApiException;
+use GuzzleHttp\Exception\GuzzleException;
+
+class RootServer
+{
+    private Client $client;
+    private string $basePath = 'v1/products/rootserver';
+
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
+    // ==================== LOCATIONS & CLUSTERS ====================
+
+    /**
+     * Get all available datacenters/locations
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function getLocations(): array
+    {
+        return $this->client->get("{$this->basePath}/locations");
+    }
+
+    /**
+     * Get clusters for a specific datacenter
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function getClustersByDatacenter(string $datacenterSlug): array
+    {
+        return $this->client->get("{$this->basePath}/locations/{$datacenterSlug}/clusters");
+    }
+
+    /**
+     * Get all clusters or a specific cluster
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function getClusters(?string $clusterSlug = null): array
+    {
+        $path = "{$this->basePath}/clusters";
+        if ($clusterSlug) {
+            $path .= "/{$clusterSlug}";
+        }
+        return $this->client->get($path);
+    }
+
+    /**
+     * Get available OS versions for a cluster
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function getOsList(string $clusterSlug): array
+    {
+        return $this->client->get("{$this->basePath}/clusters/{$clusterSlug}/os-list");
+    }
+
+    /**
+     * Get price list for a cluster
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function getPriceList(string $clusterSlug): array
+    {
+        return $this->client->get("{$this->basePath}/clusters/{$clusterSlug}/prices");
+    }
+
+    /**
+     * Calculate price for a server configuration
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function calculatePrice(string $clusterSlug, array $config): array
+    {
+        return $this->client->post("{$this->basePath}/clusters/{$clusterSlug}/price-calc", $config);
+    }
+
+    // ==================== SERVER LISTING ====================
+
+    /**
+     * Get all root servers with optional filters
+     *
+     * @param array $filters Available: state, datacenter_id, cluster_id, team_id
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function getAll(array $filters = []): array
+    {
+        return $this->client->get($this->basePath, $filters);
+    }
+
+    /**
+     * Get a specific root server by VM ID
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function getById(int $vmId): array
+    {
+        return $this->client->get("{$this->basePath}/{$vmId}");
+    }
+
+    // ==================== SERVER CREATION & MODIFICATION ====================
+
+    /**
+     * Create a new root server
+     *
+     * @param string $clusterSlug Cluster slug
+     * @param array $config Server configuration:
+     *   - hostname/server_name: string
+     *   - cores: int
+     *   - ram_mb/ram: int (MB)
+     *   - disk_gb/disk: int (GB)
+     *   - root_server_os_version_id/operating_system/operating_system_slug: OS selection
+     *   - root_password/admin_password: string (optional)
+     *   - ssh_keys: array (optional)
+     *   - login_method: string (optional)
+     *   - backup_slots: int (optional)
+     *   - ipv4_addresses/ipv4_count/ipv4: int (optional)
+     *   - ipv6_addresses/ipv6_count/ipv6: int (optional)
+     *   - user_data/first_run_script: string (optional)
+     *   - boot: bool (optional)
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function create(string $clusterSlug, array $config): array
+    {
+        return $this->client->post("{$this->basePath}/cluster/{$clusterSlug}/create", $config);
+    }
+
+    /**
+     * Update/resize a root server
+     *
+     * @param int $vmId Server VM ID
+     * @param array $config Resize options: cores, ram_mb, disk_gb (disk can only increase)
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function update(int $vmId, array $config): array
+    {
+        return $this->client->put("{$this->basePath}/{$vmId}", $config);
+    }
+
+    /**
+     * Delete a root server
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function delete(int $vmId): array
+    {
+        return $this->client->delete("{$this->basePath}/{$vmId}");
+    }
+
+    /**
+     * Reset root password
+     *
+     * @param int $vmId Server VM ID
+     * @param string|null $password New password (auto-generated if null)
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function resetRootPassword(int $vmId, ?string $password = null): array
+    {
+        $data = [];
+        if ($password !== null) {
+            $data['password'] = $password;
+        }
+        return $this->client->post("{$this->basePath}/{$vmId}/reset-root-password", $data);
+    }
+
+    /**
+     * Reinstall a root server
+     *
+     * @param int $vmId Server VM ID
+     * @param array $config Reinstall options:
+     *   - server_name: string (optional)
+     *   - cores, ram, disk: int (optional)
+     *   - root_server_os_version_id/operating_system/operating_system_slug: OS (optional)
+     *   - admin_password: string (optional)
+     *   - ssh_keys: array (optional)
+     *   - first_run_script: string (optional)
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function reinstall(int $vmId, array $config = []): array
+    {
+        return $this->client->post("{$this->basePath}/{$vmId}/reinstall", $config);
+    }
+
+    // ==================== POWER CONTROL ====================
+
+    /**
+     * Start server
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function start(int $vmId): array
+    {
+        return $this->client->post("{$this->basePath}/{$vmId}/power/start");
+    }
+
+    /**
+     * Stop server (graceful shutdown)
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function stop(int $vmId): array
+    {
+        return $this->client->post("{$this->basePath}/{$vmId}/power/stop");
+    }
+
+    /**
+     * Reboot server
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function reboot(int $vmId): array
+    {
+        return $this->client->post("{$this->basePath}/{$vmId}/power/reboot");
+    }
+
+    /**
+     * Force stop server (power off)
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function forceStop(int $vmId): array
+    {
+        return $this->client->post("{$this->basePath}/{$vmId}/power/force-stop");
+    }
+
+    // ==================== MONITORING & STATUS ====================
+
+    /**
+     * Get live server stats
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function getStats(int $vmId): array
+    {
+        return $this->client->get("{$this->basePath}/{$vmId}/stats");
+    }
+
+    /**
+     * Get server logs
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function getLogs(int $vmId, int $limit = 50): array
+    {
+        return $this->client->get("{$this->basePath}/{$vmId}/logs", ['limit' => $limit]);
+    }
+
+    /**
+     * Get server tasks
+     *
+     * @throws ApiException
+     * @throws GuzzleException
+     */
+    public function getTasks(int $vmId, int $limit = 50): array
+    {
+        return $this->client->get("{$this->basePath}/{$vmId}/tasks", ['limit' => $limit]);
+    }
+}
