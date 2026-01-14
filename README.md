@@ -350,6 +350,8 @@ $available = $client->vpn()->checkUsername('new-user');
 | `delete(int $id)` | Delete account |
 | `sync(int $id)` | Sync account |
 | `changePassword(int $id, string $password)` | Change password |
+| `enable(int $id)` | Enable account |
+| `disable(int $id)` | Disable account |
 
 ```php
 // Create account
@@ -360,7 +362,15 @@ $client->vpn()->account()->changePassword(123, 'new-password');
 
 // Sync account
 $client->vpn()->account()->sync(123);
+
+// Enable account (must be disabled, pending, or error state)
+$client->vpn()->account()->enable(123);
+
+// Disable account (must be active state)
+$client->vpn()->account()->disable(123);
 ```
+
+> **Note:** Suspended accounts cannot be enabled via API. Contact support to lift the suspension.
 
 #### Config (`$client->vpn()->config()`)
 
@@ -538,7 +548,7 @@ Many operations are executed asynchronously and return a 202 status:
 - Server create/delete/resize
 - Power operations (start, stop, reboot)
 - Mailcow domain/mailbox/alias create/update/delete
-- VPN account create/delete
+- VPN account create/delete/enable/disable
 
 The response typically contains a job ID or task information for tracking.
 

@@ -93,4 +93,41 @@ class Account
             'password' => $password,
         ]);
     }
+
+    /**
+     * Enable a VPN account
+     *
+     * Enables a previously disabled VPN account. The account must be in a state
+     * that allows enabling (disabled, pending, or error).
+     * Suspended accounts cannot be enabled via API - contact support.
+     * The operation is processed asynchronously.
+     *
+     * @param int $id Account ID
+     * @return array Account data with updated state
+     *
+     * @throws ApiException When account cannot be enabled (e.g., suspended or already active)
+     * @throws GuzzleException
+     */
+    public function enable(int $id): array
+    {
+        return $this->client->post("{$this->basePath}/accounts/{$id}/enable");
+    }
+
+    /**
+     * Disable a VPN account
+     *
+     * Disables an active VPN account. The account must be in 'active' state.
+     * Disabled accounts can be re-enabled later. Billing is paused while disabled.
+     * The operation is processed asynchronously.
+     *
+     * @param int $id Account ID
+     * @return array Account data with updated state
+     *
+     * @throws ApiException When account cannot be disabled (e.g., not active)
+     * @throws GuzzleException
+     */
+    public function disable(int $id): array
+    {
+        return $this->client->post("{$this->basePath}/accounts/{$id}/disable");
+    }
 }
