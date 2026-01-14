@@ -1,17 +1,17 @@
 <?php
 
-namespace Exbil\CloudApi;
+namespace Exbil\ResellingAPI;
 
-use Exbil\CloudApi\Accounting\Accounting;
-use Exbil\CloudApi\Domain\Domain;
-use Exbil\CloudApi\Exceptions\ApiException;
-use Exbil\CloudApi\Exceptions\AuthenticationException;
-use Exbil\CloudApi\Exceptions\ForbiddenException;
-use Exbil\CloudApi\Exceptions\NotFoundException;
-use Exbil\CloudApi\Exceptions\ValidationException;
-use Exbil\CloudApi\Mailcow\Mailcow;
-use Exbil\CloudApi\RootServer\RootServer;
-use Exbil\CloudApi\VPN\VPN;
+use Exbil\ResellingAPI\Accounting\Accounting;
+use Exbil\ResellingAPI\Domain\Domain;
+use Exbil\ResellingAPI\Exceptions\ApiException;
+use Exbil\ResellingAPI\Exceptions\AuthenticationException;
+use Exbil\ResellingAPI\Exceptions\ForbiddenException;
+use Exbil\ResellingAPI\Exceptions\NotFoundException;
+use Exbil\ResellingAPI\Exceptions\ValidationException;
+use Exbil\ResellingAPI\Mailcow\Mailcow;
+use Exbil\ResellingAPI\RootServer\RootServer;
+use Exbil\ResellingAPI\VPN\VPN;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
@@ -43,7 +43,7 @@ class Client
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->credentials->getApiKey(),
-                'User-Agent' => 'ExbilCloudApiClient/1.0',
+                'User-Agent' => 'ExbilResellingApiClient/1.0',
             ],
             'timeout' => 30,
             'verify' => true,

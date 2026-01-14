@@ -14,7 +14,7 @@ composer require exbil/reselling-api-client
 <?php
 require 'vendor/autoload.php';
 
-use Exbil\CloudApi\Client;
+use Exbil\ResellingAPI\Client;
 
 $client = new Client('your-api-key', 'https://reselling-portal.de/api/');
 
@@ -501,11 +501,11 @@ $client->mailcow()->domainAdmin()->update('example.com', 'admin', [
 ## Error Handling
 
 ```php
-use Exbil\CloudApi\Exceptions\ApiException;
-use Exbil\CloudApi\Exceptions\AuthenticationException;
-use Exbil\CloudApi\Exceptions\ForbiddenException;
-use Exbil\CloudApi\Exceptions\NotFoundException;
-use Exbil\CloudApi\Exceptions\ValidationException;
+use Exbil\ResellingAPI\Exceptions\ApiException;
+use Exbil\ResellingAPI\Exceptions\AuthenticationException;
+use Exbil\ResellingAPI\Exceptions\ForbiddenException;
+use Exbil\ResellingAPI\Exceptions\NotFoundException;
+use Exbil\ResellingAPI\Exceptions\ValidationException;
 
 try {
     $server = $client->rootServer()->get(99999);

@@ -1,9 +1,9 @@
 <?php
 
-namespace Exbil\CloudApi\Accounting;
+namespace Exbil\ResellingAPI\Accounting;
 
-use Exbil\CloudApi\Client;
-use Exbil\CloudApi\Exceptions\ApiException;
+use Exbil\ResellingAPI\Client;
+use Exbil\ResellingAPI\Exceptions\ApiException;
 use GuzzleHttp\Exception\GuzzleException;
 
 class Accounting

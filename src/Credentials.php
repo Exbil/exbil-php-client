@@ -1,6 +1,6 @@
 <?php
 
-namespace Exbil\CloudApi;
+namespace Exbil\ResellingAPI;
 
 class Credentials
 {

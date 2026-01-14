@@ -6,7 +6,7 @@
     "license": "BSD-2-Clause",
     "autoload": {
         "psr-4": {
-            "Exbil\\CloudApi\\": "src/"
+            "Exbil\\ResellingAPI\\": "src/"
         }
     },
     "authors": [

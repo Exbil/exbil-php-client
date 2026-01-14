@@ -1,6 +1,6 @@
 <?php
 
-namespace Exbil\CloudApi\Exceptions;
+namespace Exbil\ResellingAPI\Exceptions;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;
